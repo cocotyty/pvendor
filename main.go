@@ -37,11 +37,12 @@ func main() {
 	}
 	file, err := ioutil.ReadFile(*conf)
 	if err != nil {
-		if *conf == "./vendor.toml" {
+		if *conf == "."+S+"vendor.toml" {
 			ioutil.WriteFile("."+S+"vendor.toml", def, 0777)
 			return
 		}
 		fmt.Println("配置文件读取错误", *conf)
+		return
 	}
 	deps := &configFile{}
 	err = toml.Unmarshal(file, deps)
@@ -56,7 +57,9 @@ func main() {
 				return
 			}
 		}
+		cmd("rm", "-rf", dir+S+"vendor"+S+v.Path)
 		cmd("git", "clone", v.Git, dir+S+"vendor"+S+v.Path)
+		cmd("rm","-rf", dir+S+"vendor"+S+v.Path+S+".git")
 		if v.Branch != "" {
 			wdCmd(dir+S+"vendor"+S+v.Path, "git", "checkout", v.Branch)
 		}
