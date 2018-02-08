@@ -59,10 +59,11 @@ func main() {
 		}
 		cmd("rm", "-rf", dir+S+"vendor"+S+v.Path)
 		cmd("git", "clone", v.Git, dir+S+"vendor"+S+v.Path)
-		cmd("rm","-rf", dir+S+"vendor"+S+v.Path+S+".git")
 		if v.Branch != "" {
 			wdCmd(dir+S+"vendor"+S+v.Path, "git", "checkout", v.Branch)
 		}
+		cmd("rm","-rf", dir+S+"vendor"+S+v.Path+S+".git")
+
 	}
 }
 func wdCmd(workDir string, args ... string) {
